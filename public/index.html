@@ -46,8 +46,7 @@
                 </div>
                 <div id="user-info">
                     <span>Welcome, <span id="username-display">User</span></span>
-                    <button id="logout-btn" class="icon-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
-                    <button id="dark-mode-toggle" class="icon-btn"><i class="fas fa-moon"></i></button>
+                    <button id="logout-btn" class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
         </header>
@@ -56,17 +55,17 @@
             <aside id="sidebar">
                 <nav id="job-seeker-nav" style="display: none;">
                     <ul>
-                        <li><a href="#" data-view="search-jobs">Search Jobs</a></li>
-                        <li><a href="#" data-view="my-applications">My Applications</a></li>
-                        <li><a href="#" data-view="profile">Profile</a></li>
-                        <li><a href="#" data-view="notifications">Notifications</a></li>
+                        <li><a href="#" data-view="search-jobs"><i class="fa-solid fa-search"></i> Search Jobs</a></li>
+                        <li><a href="#" data-view="my-applications"><i class="fa-solid fa-file-alt"></i> My Applications</a></li>
+                        <li><a href="#" data-view="profile"><i class="fa-solid fa-user"></i> Profile</a></li>
+                        <li><a href="#" data-view="notifications"><i class="fa-solid fa-bell"></i> Notifications</a></li>
                     </ul>
                 </nav>
                 <nav id="job-provider-nav" style="display: none;">
                     <ul>
-                        <li><a href="#" data-view="post-job">Post a Job</a></li>
-                        <li><a href="#" data-view="my-postings">My Postings</a></li>
-                         <li><a href="#" data-view="notifications">Notifications</a></li>
+                        <li><a href="#" data-view="post-job"><i class="fa-solid fa-plus-circle"></i> Post a Job</a></li>
+                        <li><a href="#" data-view="my-postings"><i class="fa-solid fa-list-alt"></i> My Postings</a></li>
+                         <li><a href="#" data-view="notifications"><i class="fa-solid fa-bell"></i> Notifications</a></li>
                     </ul>
                 </nav>
             </aside>
@@ -76,6 +75,8 @@
             </main>
         </div>
     </div>
+    
+    <div id="modal-container"></div>
 
     <script src="script.js"></script>
 </body>

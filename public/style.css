@@ -1,30 +1,54 @@
+/* === GOOGLE FONTS === */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
 :root {
-    --primary-color: #007bff;
-    --primary-hover-color: #0056b3;
-    --secondary-color: #6c757d;
-    --danger-color: #dc3545;
-    --danger-hover-color: #c82333;
-    --success-color: #28a745;
-    --success-hover-color: #218838;
-    --warning-color: #ffc107;
-    --info-color: #17a2b8;
+    --primary-color: #00ff41; /* Kali Green */
+    --primary-hover-color: #00e53a;
+    --secondary-color: #00a2ff; /* Tech Blue */
+    --background-color: #0d0d0d;
+    --surface-color: #1a1a1a;
+    --surface-color-translucent: rgba(26, 26, 26, 0.85);
+    --text-color: #e0e0e0;
+    --muted-text-color: #888888;
+    --border-color: #2a2a2a;
+    --shadow-color: rgba(0, 255, 65, 0.1);
+    --danger-color: #ff4757;
 
-    --background-color: #f8f9fa;
-    --surface-color: #ffffff;
-    --text-color: #212529;
-    --muted-text-color: #6c757d;
-    --border-color: #dee2e6;
-    --shadow-color: rgba(0, 0, 0, 0.05);
-
-    --header-bg: var(--primary-color);
-    --header-text: #ffffff;
-    --sidebar-bg: #343a40;
-    --sidebar-text: #f8f9fa;
-    --sidebar-link-hover: #495057;
-
-    --font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-    --border-radius: 8px;
+    --font-primary: 'Roboto Mono', monospace;
+    --font-secondary: 'Share Tech Mono', monospace;
+    --border-radius: 4px;
     --transition-speed: 0.3s ease;
+}
+
+body {
+    font-family: var(--font-primary);
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    background-image:
+        linear-gradient(rgba(13, 13, 13, 0.95), rgba(13, 13, 13, 0.95)),
+        url('https://www.kali.org/images/bg-downloads.jpg'); /* Example background */
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(var(--surface-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--surface-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: -1;
 }
 
 body.dark-mode {
@@ -45,18 +69,13 @@ body.dark-mode {
 }
 
 body {
-    font-family: var(--font-family);
-    margin: 0;
-    padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
     transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
 .container {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: auto;
-    padding: 0 20px;
+    padding: 0 30px;
 }
 
 #auth-container {
@@ -64,45 +83,45 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    backdrop-filter: blur(5px);
 }
 
 .form-container {
-    background: var(--surface-color);
-    padding: 2.5rem;
+    background: var(--surface-color-translucent);
+    padding: 2.5rem 3rem;
     border-radius: var(--border-radius);
-    box-shadow: 0 4px 20px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 30px var(--shadow-color);
     width: 450px;
-    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+    backdrop-filter: blur(10px);
 }
 
 .form-container h2 {
+    font-family: var(--font-secondary);
     text-align: center;
-    margin-bottom: 2rem;
-    font-weight: 600;
-}
-
-.form-container .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+    font-size: 2rem;
+    color: var(--primary-color);
+    text-shadow: 0 0 10px var(--primary-color);
 }
 
 .form-container input,
 .form-container select {
     width: 100%;
     padding: 0.9rem;
+    margin-bottom: 1.2rem;
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
-    background-color: var(--background-color);
+    background-color: rgba(13, 13, 13, 0.8);
     color: var(--text-color);
+    font-family: var(--font-primary);
     box-sizing: border-box;
-    transition: border-color var(--transition-speed), background-color var(--transition-speed);
 }
 .form-container input:focus,
 .form-container select:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 10px var(--shadow-color);
 }
 
 .form-container button {
@@ -110,17 +129,19 @@ body {
     padding: 0.9rem;
     margin-top: 1.5rem;
     border-radius: var(--border-radius);
-    border: none;
-    background-color: var(--primary-color);
-    color: white;
+    border: 1px solid var(--primary-color);
+    background-color: transparent;
+    color: var(--primary-color);
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color var(--transition-speed);
+    transition: background-color var(--transition-speed), color var(--transition-speed), text-shadow var(--transition-speed);
 }
 
 .form-container button:hover {
-    background-color: var(--primary-hover-color);
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    text-shadow: 0 0 5px var(--background-color);
 }
 
 .form-container p {
@@ -140,15 +161,13 @@ body {
 
 /* Main App Layout */
 header {
-    background: var(--header-bg);
-    color: var(--header-text);
-    padding: 0.8rem 0;
-    box-shadow: 0 2px 4px var(--shadow-color);
+    background: var(--surface-color-translucent);
+    padding: 1rem 0;
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 1000;
-    transition: background-color var(--transition-speed);
+    backdrop-filter: blur(10px);
 }
 
 header .container {
@@ -158,9 +177,9 @@ header .container {
 }
 
 header h1 {
-    margin: 0;
-    font-size: 1.7rem;
-    font-weight: 700;
+    font-family: var(--font-secondary);
+    color: var(--primary-color);
+    text-shadow: 0 0 10px var(--shadow-color);
 }
 
 #user-info {
@@ -176,24 +195,13 @@ header h1 {
 .icon-btn {
     background: transparent;
     border: none;
-    color: var(--header-text);
-    font-size: 1.2rem;
+    color: var(--secondary-color);
+    font-size: 1.4rem;
     cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color var(--transition-speed);
-}
-.icon-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 #logout-btn {
-    color: var(--header-text);
+    color: var(--text-color);
     font-size: 1rem;
     width: auto;
     height: auto;
@@ -208,20 +216,18 @@ body.dark-mode #logout-btn:hover {
     background-color: rgba(220, 53, 69, 0.1);
 }
 
-
 #main-content {
     display: flex;
 }
 
 #sidebar {
     width: 260px;
-    background: var(--sidebar-bg);
-    padding: 1.5rem 1rem;
-    height: calc(100vh - 67px); /* Header height + border */
-    position: sticky;
-    top: 67px; /* Header height + border */
+    background: var(--surface-color-translucent);
     border-right: 1px solid var(--border-color);
-    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+    height: calc(100vh - 70px);
+    position: sticky;
+    top: 70px;
+    padding-top: 1.5rem;
 }
 
 #sidebar nav ul {
@@ -231,22 +237,29 @@ body.dark-mode #logout-btn:hover {
 }
 
 #sidebar nav ul li a {
-    color: var(--sidebar-text);
+    color: var(--text-color);
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 0.9rem 1.2rem;
+    margin: 0 1rem 0.5rem;
     border-radius: var(--border-radius);
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    transition: background-color var(--transition-speed), color var(--transition-speed);
+    border-left: 3px solid transparent;
+    transition: all var(--transition-speed);
 }
 
-#sidebar nav ul li a:hover,
+#sidebar nav ul li a:hover {
+    background: var(--shadow-color);
+    color: var(--primary-color);
+    border-left: 3px solid var(--primary-color);
+}
+
 #sidebar nav ul li a.active {
-    background: var(--primary-color);
-    color: var(--header-text);
+    background: var(--shadow-color);
+    color: var(--primary-color);
+    border-left: 3px solid var(--primary-color);
+    font-weight: 700;
 }
 
 #sidebar nav ul li a .fa-solid {
@@ -257,17 +270,15 @@ body.dark-mode #logout-btn:hover {
 #page-content {
     flex: 1;
     padding: 2.5rem;
-    background: var(--background-color);
 }
 
 /* Generic Card style */
 .card {
-    background: var(--surface-color);
+    background: var(--surface-color-translucent);
     padding: 1.5rem;
     border-radius: var(--border-radius);
-    box-shadow: 0 2px 8px var(--shadow-color);
+    border: 1px solid var(--border-color);
     margin-bottom: 1.5rem;
-    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
 }
 
 .card h3 {
@@ -307,13 +318,12 @@ body.dark-mode #logout-btn:hover {
     background-color: var(--primary-hover-color);
 }
 
-
 /* Table Styles */
 .data-table {
     width: 100%;
     border-collapse: collapse;
-    background: var(--surface-color);
-    box-shadow: 0 2px 8px var(--shadow-color);
+    background: var(--surface-color-translucent);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     overflow: hidden;
 }
@@ -325,8 +335,9 @@ body.dark-mode #logout-btn:hover {
 }
 
 .data-table thead th {
-    background: var(--background-color);
-    font-weight: 600;
+    background: rgba(0, 255, 65, 0.1);
+    color: var(--primary-color);
+    font-family: var(--font-secondary);
 }
 .data-table tbody tr:last-child td {
     border-bottom: none;
@@ -338,14 +349,15 @@ body.dark-mode #logout-btn:hover {
 /* Status Badges */
 .status {
     padding: 0.3rem 0.6rem;
-    border-radius: 1rem;
+    border-radius: 4px;
     font-weight: bold;
     font-size: 0.8rem;
     text-transform: capitalize;
+    border: 1px solid;
 }
-.status-pending { background-color: var(--warning-color); color: #333; }
-.status-accepted, .status-open { background-color: var(--success-color); color: #fff; }
-.status-closed, .status-rejected { background-color: var(--danger-color); color: #fff; }
+.status-pending { border-color: var(--warning-color); color: var(--warning-color); }
+.status-accepted, .status-open { border-color: var(--success-color); color: var(--success-color); }
+.status-closed, .status-rejected { border-color: var(--danger-color); color: var(--danger-color); }
 
 /* Notification List */
 .notification-item {
@@ -498,4 +510,8 @@ body.dark-mode #logout-btn:hover {
 .notification-list .notification-item span {
     color: #6c757d;
     font-size: 0.9rem;
+}
+
+body, html {
+    height: 100%;
 } 
