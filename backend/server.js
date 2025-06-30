@@ -13,14 +13,12 @@ app.use(express.json());
 app.use(express.static('../public')); // Serve frontend files
 
 // Connect to Database
-/*
 const db = process.env.MONGODB_URI;
 mongoose.connect(db, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
-*/
 
 // Define Routes
 app.use('/api/users', require('./routes/users'));
