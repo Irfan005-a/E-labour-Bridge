@@ -18,90 +18,107 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- State ---
     let currentUser = null;
-    let db = {};
+    let token = null;
 
-    // --- Database Initialization ---
-    function initDB() {
-        const localDB = localStorage.getItem('eLaborBridgeDB');
-        if (localDB) {
-            db = JSON.parse(localDB);
-        } else {
-            db = {
-                users: [],
-                jobs: [],
-                applications: [],
-                nextId: 1
-            };
-            // Create a default admin and a couple of users for demo
-            const defaultUsers = [
-                { id: getNextId(), username: 'provider', email: 'provider@test.com', password: 'password', role: 'provider' },
-                { id: getNextId(), username: 'seeker', email: 'seeker@test.com', password: 'password', role: 'seeker' }
-            ];
-            db.users.push(...defaultUsers);
-            saveDB();
+    const API_URL = '/api';
+
+    // --- API Helper ---
+    async function apiRequest(endpoint, method = 'GET', body = null) {
+        const headers = { 'Content-Type': 'application/json' };
+        const token = localStorage.getItem('eLaborBridgeToken');
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
         }
-    }
 
-    function saveDB() {
-        localStorage.setItem('eLaborBridgeDB', JSON.stringify(db));
-    }
+        const config = {
+            method,
+            headers,
+        };
 
-    function getNextId() {
-        const id = db.nextId;
-        db.nextId++;
-        saveDB();
-        return id;
+        if (body) {
+            config.body = JSON.stringify(body);
+        }
+
+        try {
+            const response = await fetch(API_URL + endpoint, config);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.msg || 'An error occurred');
+            }
+            return response.json();
+        } catch (error) {
+            console.error('API Request Error:', error);
+            alert(error.message);
+            throw error;
+        }
     }
 
     // --- Authentication ---
-    function register(username, email, password, role) {
-        if (db.users.find(u => u.username === username)) {
-            alert('Username already exists.');
-            return;
+    async function register(username, email, password, role) {
+        try {
+            const data = await apiRequest('/users/register', 'POST', { username, email, password, role });
+            setSession(data.token);
+            await checkSession();
+        } catch (error) {
+            // Error is already logged and alerted by apiRequest
         }
-        const newUser = { id: getNextId(), username, email, password, role, skills: '' };
-        db.users.push(newUser);
-        saveDB();
-        login(username, password);
     }
 
-    function login(username, password) {
-        const user = db.users.find(u => u.username === username && u.password === password);
-        if (user) {
-            currentUser = user;
-            sessionStorage.setItem('eLaborBridgeUser', JSON.stringify(user));
-            showApp();
-        } else {
-            alert('Invalid credentials.');
+    async function login(username, password) {
+        try {
+            const data = await apiRequest('/users/login', 'POST', { username, password });
+            setSession(data.token, data.user);
+            showApp(data.user);
+        } catch (error) {
+             // Error is already logged and alerted by apiRequest
+        }
+    }
+    
+    function setSession(newToken, userData) {
+        token = newToken;
+        localStorage.setItem('eLaborBridgeToken', token);
+        if(userData) {
+            currentUser = userData;
+            sessionStorage.setItem('eLaborBridgeUser', JSON.stringify(userData));
         }
     }
 
     function logout() {
+        token = null;
         currentUser = null;
+        localStorage.removeItem('eLaborBridgeToken');
         sessionStorage.removeItem('eLaborBridgeUser');
         authContainer.style.display = 'flex';
         appContainer.style.display = 'none';
     }
 
-    function checkSession() {
-        const sessionUser = sessionStorage.getItem('eLaborBridgeUser');
-        if (sessionUser) {
-            currentUser = JSON.parse(sessionUser);
-            showApp();
+    async function checkSession() {
+        const storedToken = localStorage.getItem('eLaborBridgeToken');
+        if (storedToken) {
+            token = storedToken;
+            // You might want an endpoint to verify the token and get user data
+            const storedUser = sessionStorage.getItem('eLaborBridgeUser');
+            if(storedUser) {
+                currentUser = JSON.parse(storedUser);
+                showApp(currentUser);
+            } else {
+                // Optional: a /api/users/me endpoint to get fresh user data
+                logout(); // If no user data, logout
+            }
         }
     }
 
     // --- UI Control ---
-    function showApp() {
+    function showApp(user) {
         authContainer.style.display = 'none';
         appContainer.style.display = 'block';
-        usernameDisplay.textContent = currentUser.username;
+        usernameDisplay.textContent = user.username;
 
-        if (currentUser.role === 'seeker') {
+        if (user.role === 'seeker') {
             seekerNav.style.display = 'block';
             providerNav.style.display = 'none';
             loadView('search-jobs');
-        } else if (currentUser.role === 'provider') {
+        } else if (user.role === 'provider') {
             seekerNav.style.display = 'none';
             providerNav.style.display = 'block';
             loadView('my-postings');
@@ -114,13 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const isDarkMode = document.body.classList.contains('dark-mode');
         darkModeToggle.innerHTML = `<i class="fas ${isDarkMode ? 'fa-sun' : 'fa-moon'}"></i>`;
         localStorage.setItem('darkMode', isDarkMode);
-    }
-
-    function initDarkMode() {
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
     }
 
     // --- Views / Dynamic Content ---
@@ -317,7 +327,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Initial Load ---
-    initDB();
-    initDarkMode();
     checkSession();
 });
